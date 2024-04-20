@@ -78,7 +78,7 @@ def read_clipboard():
     clipboard_content = re.sub(r"\r\n\r\n已啟用聊天室訊息重播功能。直播時的所有聊天室訊息都會顯示在這裡。", '', clipboard_content)
     return clipboard_content
 
-target = list(j for j in range(81, 102)) + list(i for i in range(103, 118))
+target = list(j for j in range(90, 102)) + list(i for i in range(103, 118))
 
 for game in target:
     videosSearch = VideosSearch(f'G{game}【FIRE】企業19年甲級男女排球聯賽', limit = 1)
@@ -87,7 +87,7 @@ for game in target:
     url = videosSearch.result()['result'][0]['link']
     driver.get(url)
 
-    time.sleep(10)
+    time.sleep(5)
 
     any_YT_position = [1259, 286]
     play_position = [543, 606]
