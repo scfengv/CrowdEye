@@ -3,9 +3,10 @@ import time
 import json
 import spacy
 import random
+import selenium
 import pyautogui
 import pyperclip
-import selenium
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from youtubesearchpython import VideosSearch
@@ -15,6 +16,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 overall_clf = spacy.load("Overall_model")
 game_clf = spacy.load("Game_model")
+sa_clf = spacy.load("Chat_model")
 
 overall_topic = ["轉播", "加油", "閒聊"]
 
@@ -23,8 +25,10 @@ def model(text):
     o = overall_clf(text).cats
     for topic in overall_topic:
         result[topic] = o[topic]
-        g = game_clf(text).cats
-        result.update(g)
+    g = game_clf(text).cats
+    sa = sa_clf(text).cats
+    result.update(g)
+    result.update(sa)
     
     return result
 
@@ -59,10 +63,7 @@ def extract_data(input_data):
 
                 extracted_data.append(entry_dict)
 
-                print(entry_dict)
-
-    if len(history) > 100:
-        history.clear()
+                print(entry_dict, end = "\r")
 
     return extracted_data
 
@@ -73,12 +74,16 @@ def ctrl_a():
 def ctrl_c():
     pyautogui.hotkey('ctrl', 'c')
 
+def speed_up():
+    pyautogui.press('right')
+
 def read_clipboard():
     clipboard_content = pyperclip.paste()
     clipboard_content = re.sub(r"\r\n\r\n已啟用聊天室訊息重播功能。直播時的所有聊天室訊息都會顯示在這裡。", '', clipboard_content)
     return clipboard_content
 
-target = list(j for j in range(90, 102)) + list(i for i in range(103, 118))
+no_comment = [43, 44, 45, 53, 62, 77]
+target = list(i for i in range(70, 77) if i not in no_comment)
 
 for game in target:
     videosSearch = VideosSearch(f'G{game}【FIRE】企業19年甲級男女排球聯賽', limit = 1)
@@ -87,7 +92,7 @@ for game in target:
     url = videosSearch.result()['result'][0]['link']
     driver.get(url)
 
-    time.sleep(5)
+    time.sleep(10)
 
     any_YT_position = [1259, 286]
     play_position = [543, 606]
@@ -95,6 +100,9 @@ for game in target:
     speed = [766, 672]
     def_speed = [942, 461]
     x2_position = [924, 669]
+    qua_position = [773, 739]
+    qua_scroll_down = [986, 770]
+    low_144p = [683, 679]
     chat_setting = [1408, 371]
     time_stamp = [1386, 442]
     chatroom_switch_arrow = [1329, 370] 
@@ -120,6 +128,25 @@ for game in target:
 
     pyautogui.click(x2_position)
     time.sleep(round(random.uniform(1, 2), 2))
+
+    pyautogui.click(play_position)
+    time.sleep(round(random.uniform(1, 2), 2))
+
+    pyautogui.click(setting_position)
+    time.sleep(round(random.uniform(1, 2), 2)) 
+
+    pyautogui.click(qua_position)
+    time.sleep(round(random.uniform(1, 2), 2)) 
+
+    pyautogui.click(qua_scroll_down)
+    time.sleep(round(random.uniform(1, 2), 2))
+    pyautogui.click(qua_scroll_down)
+    time.sleep(round(random.uniform(1, 2), 2))
+    pyautogui.click(qua_scroll_down)
+    time.sleep(round(random.uniform(1, 2), 2))
+
+    pyautogui.click(low_144p)
+    time.sleep(round(random.uniform(1, 2), 2)) 
 
     pyautogui.click(chat_setting)
     time.sleep(round(random.uniform(1, 2), 2))
@@ -151,6 +178,7 @@ for game in target:
         content = read_clipboard()[:-2]
 
         extracted_data = extract_data(content)
+        driver.delete_all_cookies()
 
         play_time = time.time() - start_time
 
