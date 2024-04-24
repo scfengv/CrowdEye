@@ -83,8 +83,8 @@ def read_clipboard():
     return clipboard_content
 
 no_comment = [2, 3, 16, 43, 44, 45, 53, 62, 77]
-missing = [42, 50, 51,59, 64, 87, 73, 75,97, 108, 112, 115]
-target = list(i for i in range(1, 40) if i not in no_comment)
+missing = [42, 50, 51, 59, 64, 87, 73, 75, 97, 108, 112, 115]
+target = list(i for i in range(15, 40) if i not in no_comment) + missing
 
 for game in target:
     videosSearch = VideosSearch(f'G{game}【FIRE】企業19年甲級男女排球聯賽', limit = 1)
