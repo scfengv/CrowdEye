@@ -82,8 +82,9 @@ def read_clipboard():
     clipboard_content = re.sub(r"\r\n\r\n已啟用聊天室訊息重播功能。直播時的所有聊天室訊息都會顯示在這裡。", '', clipboard_content)
     return clipboard_content
 
-no_comment = [43, 44, 45, 53, 62, 77]
-target = list(i for i in range(70, 77) if i not in no_comment)
+no_comment = [2, 3, 16, 43, 44, 45, 53, 62, 77]
+missing = [42, 50, 51,59, 64, 87, 73, 75,97, 108, 112, 115]
+target = list(i for i in range(1, 40) if i not in no_comment)
 
 for game in target:
     videosSearch = VideosSearch(f'G{game}【FIRE】企業19年甲級男女排球聯賽', limit = 1)
